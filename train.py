@@ -17,9 +17,6 @@ import utils
 from datasets import load_dataset
 import numpy as np
 
-'''
-source: https://github.com/VictoriousRaptor/sst-clf-torch
-'''
 
 def collate_fn_weighted(data):
     """Pad data in a batch.
@@ -125,19 +122,6 @@ def main():
         validation_iter = utils.create_dataset(validation_set['sentence'], validation_set['label'], batch_size=args.batch_size, shuffle=True, sentence_list2=None, max_len=args.max_len)
 
         args.length = args.max_len
-        # training_set = SSTDataset(args.dataset_path, 'train', args.label_num, args.wordvec_dim, wordvec)
-        # testing_set = SSTDataset(args.dataset_path, 'test', args.label_num, args.wordvec_dim, wordvec)
-        # validation_set = SSTDataset(args.dataset_path, 'dev', args.label_num, args.wordvec_dim, wordvec)
-
-        # training_iter = DataLoader(dataset=training_set,
-        #                         batch_size=args.batch_size,
-        #                         num_workers=0, shuffle=True, collate_fn=collate_fn, pin_memory=True)
-        # testing_iter = DataLoader(dataset=testing_set,
-        #                         batch_size=args.batch_size,
-        #                         num_workers=0, collate_fn=collate_fn, pin_memory=True)
-        # validation_iter = DataLoader(dataset=validation_set,
-        #                             batch_size=args.batch_size,
-        #                             num_workers=0, collate_fn=collate_fn, pin_memory=True)
 
     elif args.dataset == 'cola':
         train_set = load_dataset('glue', args.dataset, split='train')
@@ -188,20 +172,13 @@ def main():
     elif args.dataset == 'qqp':
         name = ['question1', 'question2']
         train_set = load_dataset('glue', args.dataset, split='train')
-        # test_set = load_dataset('glue', args.dataset, split='test')s
+        # test_set = load_dataset('glue', args.dataset, split='test')
         validation_set = load_dataset('glue', args.dataset, split='validation')
 
-        training_iter = utils.create_dataset(train_set[name[0]][:int(len(train_set[name[0]])*0.7)], train_set['label'][:int(len(train_set[name[0]])*0.7)], batch_size=args.batch_size*32, shuffle=True, sentence_list2=train_set[name[1]][:int(len(train_set[name[0]])*0.7)], max_len=args.max_len, fraction=0.8, begin=0)
+        training_iter = utils.create_dataset(train_set[name[0]][:int(len(train_set[name[0]])*0.8)], train_set['label'][:int(len(train_set[name[0]])*0.8)], batch_size=args.batch_size*32, shuffle=True, sentence_list2=train_set[name[1]][:int(len(train_set[name[0]])*0.8)], max_len=args.max_len, fraction=0.8, begin=0)
         testing_iter = utils.create_dataset(train_set[name[0]][int(len(train_set[name[0]])*0.8):], train_set['label'][int(len(train_set[name[0]])*0.8):], batch_size=args.batch_size*32, shuffle=True, sentence_list2=train_set[name[1]][int(len(train_set[name[0]])*0.8):], max_len=args.max_len, fraction=0.2, begin=0.8)
         validation_iter = utils.create_dataset(validation_set[name[0]], validation_set['label'], batch_size=args.batch_size*32, shuffle=True, sentence_list2=validation_set[name[1]], max_len=args.max_len)
 
-        # if args.method == 'GLISTERD' or args.method == 'CRAIG':
-        #     training_iter = utils.create_dataset(train_set[name[0]][:int(len(train_set[name[0]])*0.15)], train_set['label'][:int(len(train_set[name[0]])*0.15)], batch_size=args.batch_size, shuffle=True, sentence_list2=train_set[name[1]][:int(len(train_set[name[0]])*0.15)], max_len=args.max_len, fraction=0.8, begin=0)
-        # else:
-        #     training_iter = utils.create_dataset(train_set[name[0]][:int(len(train_set[name[0]])*0.8)], train_set['label'][:int(len(train_set[name[0]])*0.8)], batch_size=args.batch_size, shuffle=True, sentence_list2=train_set[name[1]][:int(len(train_set[name[0]])*0.8)], max_len=args.max_len, fraction=0.8, begin=0)
-        # testing_iter = utils.create_dataset(train_set[name[0]][int(len(train_set[name[0]])*0.8):], train_set['label'][int(len(train_set[name[0]])*0.8):], batch_size=args.batch_size, shuffle=True, sentence_list2=train_set[name[1]][int(len(train_set[name[0]])*0.8):], max_len=args.max_len, fraction=0.2, begin=0.8)
-        # validation_iter = utils.create_dataset(validation_set[name[0]][:int(len(validation_set[name[0]])*0.2)], validation_set['label'][:int(len(validation_set[name[0]])*0.2)], batch_size=args.batch_size, shuffle=True, sentence_list2=validation_set[name[1]][:int(len(validation_set[name[0]])*0.2)], max_len=args.max_len)
-        
         args.length = args.max_len * 2
 
     # elif args.dataset == 'mnli':
@@ -224,13 +201,6 @@ def main():
         testing_iter = utils.create_dataset(train_set[name[0]][int(len(train_set[name[0]])*0.8):], train_set['label'][int(len(train_set[name[0]])*0.8):], batch_size=args.batch_size*32, shuffle=True, sentence_list2=train_set[name[1]][int(len(train_set[name[0]])*0.8):], max_len=args.max_len, fraction=0.2, begin=0.8)
         validation_iter = utils.create_dataset(validation_set[name[0]], validation_set['label'], batch_size=args.batch_size*32, shuffle=True, sentence_list2=validation_set[name[1]], max_len=args.max_len)
 
-        # if args.method == 'GLISTERD' or args.method == 'CRAIG':
-        #     training_iter = utils.create_dataset(train_set[name[0]][:int(len(train_set[name[0]])*0.45)], train_set['label'][:int(len(train_set[name[0]])*0.45)], batch_size=args.batch_size, shuffle=True, sentence_list2=train_set[name[1]][:int(len(train_set[name[0]])*0.45)], max_len=args.max_len, fraction=0.8, begin=0)
-        # else:
-        #     training_iter = utils.create_dataset(train_set[name[0]][:int(len(train_set[name[0]])*0.8)], train_set['label'][:int(len(train_set[name[0]])*0.8)], batch_size=args.batch_size, shuffle=True, sentence_list2=train_set[name[1]][:int(len(train_set[name[0]])*0.8)], max_len=args.max_len, fraction=0.8, begin=0)
-        # testing_iter = utils.create_dataset(train_set[name[0]][int(len(train_set[name[0]])*0.8):], train_set['label'][int(len(train_set[name[0]])*0.8):], batch_size=args.batch_size, shuffle=True, sentence_list2=train_set[name[1]][int(len(train_set[name[0]])*0.8):], max_len=args.max_len, fraction=0.2, begin=0.8)
-        # validation_iter = utils.create_dataset(validation_set[name[0]][:int(len(validation_set[name[0]])*0.1)], validation_set['label'][:int(len(validation_set[name[0]])*0.1)], batch_size=args.batch_size, shuffle=True, sentence_list2=validation_set[name[1]][:int(len(validation_set[name[0]])*0.1)], max_len=args.max_len)
-        
         args.length = args.max_len * 2
 
     print('Time for loading glove',args.wordvec_dim,'and creating torch dataloaders:', time.time() - start)
@@ -288,25 +258,6 @@ def main():
                             device = args.device
                             )
     elif args.ss == 3: # GLISTERD
-        # if args.dataset == 'qnli':
-        #     dss_args = dict(model=model_coreset,
-        #                     loss=criterion_nored,
-        #                     eta=0.01,
-        #                     num_classes=args.label_num,
-        #                     num_epochs=args.epoch,
-        #                     # device=args.device,
-        #                     device = torch.device('cpu'),
-        #                     fraction=args.fraction,
-        #                     select_every=args.select_every,
-        #                     kappa=0,
-        #                     linear_layer=False,
-        #                     selection_type='PerBatch',
-        #                     greedy='Stochastic',
-        #                     emb_weight=args.emb_weight,
-        #                     length = args.length,
-        #                     emb_dim = args.wordvec_dim
-        #                     )
-        # else:
         dss_args = dict(model=model_coreset,
                             loss=criterion_nored,
                             eta=0.01,
@@ -326,21 +277,6 @@ def main():
                             )
     
     elif args.ss == 4: # CRAIG
-        # if args.dataset == 'qnli' or  args.dataset == 'sst2':
-        #     dss_args = dict(model=model_coreset,
-        #                 loss=criterion_nored,
-        #                 num_classes=args.label_num,
-        #                 num_epochs=args.epoch,
-        #                 device=torch.device('cpu'),
-        #                 fraction=args.fraction,
-        #                 select_every=args.select_every,
-        #                 kappa=0,
-        #                 linear_layer=False,
-        #                 selection_type='PerBatch',
-        #                 optimizer='lazy',
-        #                 if_convex=False
-        #                 )
-        # else:
         dss_args = dict(model=model_coreset,
                         loss=criterion_nored,
                         num_classes=args.label_num,
@@ -356,7 +292,6 @@ def main():
                         )
     
     if args.ss > 0:
-        # logger = logging.getLogger(__name__)
         logger = logging.getLogger(__name__)
         logging.basicConfig(level=logging.DEBUG,
                 format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
