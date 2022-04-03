@@ -10,3 +10,8 @@ PyTorch 1.11
 ```python train.py``` 
 
 Noted: run.sh provides all the scipts!
+
+## Collaborators
+[Xiaoqiang Lin](https://xqlin98.github.io)
+[Rui Qiao](https://github.com/qiaoruiyt)
+[Xilie Xu](https://github.com/GodXuxilie)
