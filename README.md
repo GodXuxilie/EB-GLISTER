@@ -6,7 +6,7 @@ Our code is based on [cords](https://github.com/decile-team/cords.git). We modif
 ## Requirement
 PyTorch 1.11
 
-## How to use?
-Just ```python train.py```
+## How to accelerate NLP training?
+```python train.py``` 
 
 Noted: run.sh provides all the scipts!
