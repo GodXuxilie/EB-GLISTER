@@ -8,7 +8,6 @@ from cords.utils.models import LSTMClassifier, SimplifiedClassifier, BiLSTMClass
 import argparse
 import time
 from cords.utils.data.dataloader.SL.adaptive import GLISTERDataLoader, OLRandomDataLoader, CRAIGDataLoader, GradMatchDataLoader, RandomDataLoader
-
 import logging
 from dotmap import DotMap
 import torchtext
@@ -72,7 +71,6 @@ def evaluation(data_iter, model, args):
         model.train()
         return 100.0 * corrects / size
 
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
@@ -96,7 +94,6 @@ def main():
     args = parser.parse_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
-
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
     torch.cuda.manual_seed_all(args.seed)
@@ -109,7 +106,6 @@ def main():
     start = time.time()
     wordvec = loadGloveModel(r'/home/x/xuxilie/glove/glove.6B.' + str(args.wordvec_dim) + 'd.txt')
     args.weight = torch.from_numpy(wordvec.values) 
-    # args.weight = torch.from_numpy(wordvec.values, dtype=torch.float)  # word embedding for the embedding layer
 
     # Datasets
     if args.dataset == 'sst2':
@@ -219,7 +215,6 @@ def main():
 
     criterion = nn.CrossEntropyLoss()
     criterion_nored = nn.CrossEntropyLoss(reduction='none')
-    # optimizer = optim.SGD(model.parameters(), lr=args.lr)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     optimizer_coreset = torch.optim.Adam(model_coreset.parameters(), lr=args.lr)
     
@@ -264,7 +259,6 @@ def main():
                             num_classes=args.label_num,
                             num_epochs=args.epoch,
                             device=args.device,
-                            # device = torch.device('cpu'),
                             fraction=args.fraction,
                             select_every=args.select_every,
                             kappa=0,
@@ -335,7 +329,7 @@ def main():
     best_epoch = 0
 
     timing = []
-    # timing_process = []
+    timing_process = []
     if args.ss > 0:
         for epoch in range(1, args.epoch+1):
             subtrn_loss = 0
@@ -343,12 +337,12 @@ def main():
             subtrn_total = 0.0
             model.train()
             start_time = time.time()
-            # start_time_process = time.process_time()
+            start_time_process = time.process_time()
             for _, (inputs, targets, weights) in enumerate(dataloader):
                 inputs = inputs.to(args.device)
                 targets = targets.to(args.device, non_blocking=True)
                 weights = weights.to(args.device)
-                # print(inputs.shape, targets.shape)
+
                 optimizer.zero_grad()
                 outputs = model(inputs)
                 outputs_coreset = model_coreset(inputs)
@@ -358,7 +352,7 @@ def main():
                 loss_coreset = torch.dot(losses_coreset, weights / (weights.sum()))
                 loss.backward()
                 loss_coreset.backward()
-                # g = model.embedding.weight.grad
+ 
                 subtrn_loss += loss.item()
 
                 loss_sum += subtrn_loss
@@ -377,7 +371,7 @@ def main():
             
             epoch_time = time.time() - start_time
             timing.append(epoch_time)
-            # timing_process.append(time.process_time()-start_time_process)
+            timing_process.append(time.process_time()-start_time_process)
             
             acc = evaluation(testing_iter, model, args)
             if acc > best_acc:
@@ -390,7 +384,7 @@ def main():
         for epoch in range(1, args.epoch + 1):
             model.train()
             start_time = time.time()
-            # start_time_process = time.process_time()
+            start_time_process = time.process_time()
             for data, label in training_iter:
                 sentences = data.to(device, non_blocking=True)  # Asynchronous loading
                 labels = label.to(device, non_blocking=True)
@@ -412,7 +406,7 @@ def main():
 
             epoch_time = time.time() - start_time
             timing.append(epoch_time)
-            # timing_process.append(time.process_time()-start_time_process)
+            timing_process.append(time.process_time()-start_time_process)
 
             acc = evaluation(testing_iter, model, args)
             if acc > best_acc:
@@ -427,8 +421,8 @@ def main():
     timing = [round(i, 5) for i in timing]
     print('total wall clock time(s):', sum(timing), 'avg wall clock time per epoch(s):',sum(timing)/len(timing))
     print('wall clock time for eah epoch:', timing)
-    # print('total process time:', sum(timing_process), 'avg process time:',sum(timing_process)/len(timing_process))
-    # print('process time for eah epoch:', timing_process)
+    print('total process time:', sum(timing_process), 'avg process time:',sum(timing_process)/len(timing_process))
+    print('process time for eah epoch:', timing_process)
 
     print("Parameters:")
     delattr(args, 'weight')
