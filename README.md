@@ -1,7 +1,7 @@
 # EB-GLISTER
 CS6217 Project --- Embedding-Boosted GLISTER (EB-GLISTER)
 
-Our subset selection code is based on [cords](https://github.com/decile-team/cords.git). We modified the [glisterstrategy.py](https://github.com/GodXuxilie/EB-GLISTER/blob/caecc4f1bae65aea09afef1733a1ae79c2538179/cords/selectionstrategies/SL/glisterstrategy.py) where we incorporated the gradients of word embeddings into the calculation of gain, and [dataselectionstrategy.py](https://github.com/GodXuxilie/EB-GLISTER/blob/caecc4f1bae65aea09afef1733a1ae79c2538179/cords/selectionstrategies/SL/dataselectionstrategy.py) where we initialized the gradients of word embeddings at the beginning of subset selection.
+Our subset selection code is based on [cords](https://github.com/decile-team/cords.git). We modified the [glisterstrategy.py](https://github.com/GodXuxilie/EB-GLISTER/blob/caecc4f1bae65aea09afef1733a1ae79c2538179/cords/selectionstrategies/SL/glisterstrategy.py) where we incorporated the gradients of word embeddings into the calculation of gain, and [dataselectionstrategy.py](https://github.com/GodXuxilie/EB-GLISTER/blob/caecc4f1bae65aea09afef1733a1ae79c2538179/cords/selectionstrategies/SL/dataselectionstrategy.py) where we initialized the gradients of word embeddings at the beginning of subset selection. To mitigate the heavy usage of GPU memory, we alternatively access and save the gradients on CPUs and GPUs.
 
 ## Requirement
 PyTorch 1.11
