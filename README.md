@@ -7,6 +7,6 @@ Our code is based on [cords](https://github.com/decile-team/cords.git). We modif
 PyTorch 1.11
 
 ## How to use?
-Just '''python train.py'''
+Just ```bash python train.py```
 
 Noted: run.sh provides all the scipts!
