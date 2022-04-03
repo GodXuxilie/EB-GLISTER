@@ -12,6 +12,6 @@ PyTorch 1.11
 Noted: run.sh provides all the scipts!
 
 ## Collaborators
-[Xiaoqiang Lin](https://xqlin98.github.io)
-[Rui Qiao](https://github.com/qiaoruiyt)
+[Xiaoqiang Lin](https://xqlin98.github.io)<br/>
+[Rui Qiao](https://github.com/qiaoruiyt)<br/>
 [Xilie Xu](https://github.com/GodXuxilie)
