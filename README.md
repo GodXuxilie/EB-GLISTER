@@ -7,7 +7,7 @@ Our subset selection code is based on [cords](https://github.com/decile-team/cor
 PyTorch 1.11
 
 ## How to accelerate NLP training?
-Before training, please download GloVe weight and nltk\_data directory from this [link](https://drive.google.com/drive/folders/107BLQbg25RWHk922Uq6RUjWi0Iy0UjaF?usp=sharing). <br/>
+Before training, please download GloVe weights and nltk\_data directories from this [link](https://drive.google.com/drive/folders/107BLQbg25RWHk922Uq6RUjWi0Iy0UjaF?usp=sharing), and then move these two directories into EB-GLISTER directory. <br/>
 Then,  ```python train.py``` .
 
 Noted: run.sh provides all the scipts!
