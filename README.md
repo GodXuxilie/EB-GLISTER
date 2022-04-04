@@ -7,7 +7,8 @@ Our subset selection code is based on [cords](https://github.com/decile-team/cor
 PyTorch 1.11
 
 ## How to accelerate NLP training?
-```python train.py``` 
+Before training, please download GloVe weight and nltk\_data directory from this [link](https://drive.google.com/drive/folders/107BLQbg25RWHk922Uq6RUjWi0Iy0UjaF?usp=sharing). <br/>
+Then,  ```python train.py``` .
 
 Noted: run.sh provides all the scipts!
 
